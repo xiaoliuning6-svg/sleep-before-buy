@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>睡一觉再买 · 下单前的三理论体检</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231F4A3F'/%3E%3Cpath d='M50 24 L72 70 H28 Z' fill='none' stroke='%23FAF7F2' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="description" content="下单前，先过一遍薄肌·大水·大睡。三理论自检 → 三轴体检报告 → 24 小时冷静期。数据只存本机。">
+<style>
+  :root {
+    --bg: #F2EFE7;
+    --card: #FFFFFF;
+    --ink: #1F1D1A;
+    --sub: #7A756E;
+    --line: #E5DFD3;
+    --green: #1F4A3F;
+    --amber: #8A6B1F;
+    --rust: #C2552F;
+    --shadow: 0 2px 10px rgba(31,29,26,.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { background: #E8E3D8; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  #app {
+    max-width: 560px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative;
+    padding-bottom: 104px; box-shadow: 0 0 0 1px rgba(31,29,26,.05), 0 24px 70px rgba(31,29,26,.07);
+  }
+
+  /* ── 顶栏 ── */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(242,239,231,.92); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; height: 52px; padding: 0 12px;
+  }
+  .topbar .back, .topbar .home { width: 44px; height: 44px; border: 0; background: none; font-size: 15px; color: var(--green); cursor: pointer; }
+  .topbar .tt { flex: 1; text-align: center; font-size: 14.5px; font-weight: 600; letter-spacing: .2px; }
+  .topbar .sp { width: 44px; }
+
+  .view { padding: 16px 16px 30px; animation: fade .22s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── 通用块 ── */
+  .card { background: var(--card); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); margin-bottom: 14px; }
+  .h1 { font-size: 22px; font-weight: 700; letter-spacing: -.4px; line-height: 1.35; }
+  .h2 { font-size: 16px; font-weight: 650; margin-bottom: 10px; }
+  .muted { color: var(--sub); font-size: 13px; line-height: 1.75; }
+  .tiny { font-size: 11.5px; color: var(--sub); letter-spacing: .2px; }
+  .row { display: flex; align-items: center; }
+  .between { justify-content: space-between; }
+  .gap8 { gap: 8px; }
+  .hr { height: 1px; background: var(--line); margin: 14px 0; }
+
+  .btn {
+    display: block; width: 100%; border: 0; border-radius: 12px; padding: 14px 16px;
+    font-size: 15.5px; font-weight: 600; font-family: inherit; cursor: pointer;
+    background: var(--green); color: #fff; transition: transform .08s, opacity .15s;
+  }
+  .btn:active { transform: scale(.985); }
+  .btn[disabled] { opacity: .4; cursor: not-allowed; }
+  .btn.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .btn.soft { background: #EDE9E0; color: var(--ink); }
+  .btn.sm { padding: 10px 14px; font-size: 14px; border-radius: 10px; width: auto; }
+
+  .chip { display: inline-block; font-size: 11.5px; padding: 3px 9px; border-radius: 6px; background: #F0EDE5; color: #6B665E; }
+  .chip.g { background: #E6EFEA; color: var(--green); }
+  .chip.a { background: #F5EEDC; color: var(--amber); }
+  .chip.r { background: #F7E7E0; color: var(--rust); }
+
+  /* ── 首页 ── */
+  .hero { padding: 26px 6px 20px; }
+  .hero .brand { font-size: 13px; letter-spacing: 2.5px; color: var(--sub); text-transform: uppercase; }
+  .hero .name { font-size: 30px; font-weight: 800; letter-spacing: -1px; margin: 6px 0 8px; }
+  .hero .slogan { font-size: 14px; color: var(--sub); }
+
+  .stats { display: flex; gap: 8px; }
+  .statbox { flex: 1; background: #fff; border-radius: 12px; padding: 12px 10px; text-align: center; box-shadow: var(--shadow); }
+  .statbox .n { font-size: 21px; font-weight: 750; line-height: 1.2; letter-spacing: -.5px; }
+  .statbox .l { font-size: 11px; color: var(--sub); margin-top: 2px; }
+  .statbox.big .n { color: var(--green); }
+
+  .todo { border-left: 3px solid var(--amber); background: #FFFDF6; }
+  .todo .t { font-size: 14.5px; font-weight: 600; }
+  .todo .d { font-size: 12.5px; color: var(--sub); margin-top: 2px; }
+
+  .tcard { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #fff; margin-bottom: 10px; }
+  .tcard .nm { font-size: 15px; font-weight: 650; }
+  .tcard .en { font-size: 10.5px; letter-spacing: 1.4px; color: #A8A29A; margin-left: 6px; }
+  .tcard .hk { font-size: 13px; color: var(--green); margin: 4px 0 6px; font-weight: 600; }
+  .tcard .ds { font-size: 12.5px; color: var(--sub); line-height: 1.7; }
+
+  /* ── 表单 ── */
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; }
+  .field .hint { font-size: 11.5px; color: var(--sub); font-weight: 400; margin-left: 4px; }
+  input, textarea {
+    width: 100%; border: 1px solid var(--line); border-radius: 11px; padding: 12px 13px;
+    font-size: 15px; font-family: inherit; color: var(--ink); background: #fff; outline: none;
+  }
+  input:focus, textarea:focus { border-color: var(--green); }
+  textarea { resize: none; height: 78px; line-height: 1.6; }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
+  .echo { margin-top: 8px; font-size: 13px; color: var(--green); min-height: 22px; font-weight: 550; }
+  .counter { text-align: right; font-size: 11.5px; color: var(--sub); margin-top: 4px; }
+
+  /* ── 自检 ── */
+  .progbar { height: 3px; background: #E5DFD3; border-radius: 2px; overflow: hidden; margin: 4px 0 18px; }
+  .progbar i { display: block; height: 100%; background: var(--green); transition: width .25s; }
+  .qwrap { padding: 5vh 2px 0; }
+  .qtheory { font-size: 13px; font-weight: 700; color: var(--green); letter-spacing: .3px; }
+  .qtext { font-size: 20px; font-weight: 650; line-height: 1.5; margin: 10px 0 22px; letter-spacing: -.3px; }
+  .opt {
+    display: block; width: 100%; text-align: left; border: 1px solid var(--line); background: #fff;
+    border-radius: 12px; padding: 15px 16px; margin-bottom: 11px; font-size: 15px; font-family: inherit;
+    color: var(--ink); cursor: pointer; min-height: 54px; transition: border-color .15s, background .15s;
+  }
+  .opt:active { background: #F6F3EC; }
+  .opt.on { border-color: var(--green); background: #EEF4F0; font-weight: 600; }
+  .qnav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .qnav button { border: 0; background: none; font-size: 13.5px; color: var(--sub); font-family: inherit; cursor: pointer; }
+
+  /* ── 报告 ── */
+  .verdict { text-align: center; padding: 22px 16px; border-radius: 14px; color: #fff; margin-bottom: 14px; }
+  .verdict .badge { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+  .verdict .sub { font-size: 11px; letter-spacing: 3px; opacity: .8; margin-top: 2px; }
+  .verdict .ln { font-size: 13.5px; line-height: 1.65; margin-top: 10px; opacity: .95; }
+
+  .quote { background: #fff; border-radius: 12px; padding: 16px; box-shadow: var(--shadow); margin-bottom: 14px; }
+  .quote .lb { font-size: 11px; letter-spacing: 1.5px; color: var(--sub); }
+  .quote .txt { font-size: 17px; font-weight: 600; line-height: 1.55; margin: 8px 0 10px; }
+  .quote .meta { font-size: 13px; color: var(--sub); }
+
+  .axis { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .axis .nm { width: 74px; font-size: 13px; font-weight: 600; flex: none; }
+  .axis .bar { flex: 1; height: 8px; background: #EDE9E0; border-radius: 4px; overflow: hidden; position: relative; }
+  .axis .bar i { display: block; height: 100%; border-radius: 4px; }
+  .axis .sc { width: 42px; text-align: right; font-size: 13px; font-weight: 700; flex: none; }
+  .axis .bar .warn { position: absolute; left: 60%; top: -2px; width: 1px; height: 12px; background: #C9BFAC; }
+
+  .diag { background: #FFFDF6; border-left: 3px solid var(--amber); border-radius: 8px; padding: 12px 14px; margin-top: 12px; }
+  .diag .nm { font-size: 12.5px; font-weight: 700; color: var(--amber); }
+  .diag .tx { font-size: 13px; line-height: 1.7; color: #5C544A; margin-top: 3px; }
+
+  .decide { display: flex; gap: 8px; margin-top: 16px; }
+  .decide button { flex: 1; padding: 13px 6px; font-size: 14.5px; }
+
+  .cool { background: #fff; border-radius: 12px; padding: 16px; text-align: center; box-shadow: var(--shadow); margin-top: 14px; }
+  .cool .cd { font-size: 26px; font-weight: 750; letter-spacing: -.5px; color: var(--amber); font-variant-numeric: tabular-nums; }
+
+  /* ── 我的 ── */
+  .item { background: #fff; border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); margin-bottom: 10px; }
+  .item .tt { font-size: 15px; font-weight: 600; }
+  .item .pr { font-size: 15px; font-weight: 700; }
+  .item .im { font-size: 12.5px; color: var(--sub); margin-top: 4px; line-height: 1.6; }
+  .item .ft { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+
+  /* ── tabbar ── */
+  .tabbar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+    max-width: 560px; margin: 0 auto;
+    display: flex; background: rgba(255,255,255,.96); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom);
+  }
+  .tabbar button {
+    flex: 1; border: 0; background: none; padding: 9px 0 8px; font-family: inherit; cursor: pointer;
+    font-size: 11.5px; color: #9A948C; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .tabbar button.on { color: var(--green); font-weight: 650; }
+  .tabbar .ico { font-size: 19px; line-height: 1; }
+
+  /* ── toast / modal ── */
+  #toast {
+    position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%) translateY(10px);
+    background: rgba(31,29,26,.94); color: #fff; font-size: 13.5px; padding: 10px 18px; border-radius: 20px;
+    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 90; max-width: 84%;
+    text-align: center; line-height: 1.5;
+  }
+  #toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #mask {
+    position: fixed; inset: 0; background: rgba(31,29,26,.42); z-index: 80;
+    display: none; align-items: center; justify-content: center; padding: 24px;
+  }
+  #mask.on { display: flex; }
+  .dlg { background: #fff; border-radius: 16px; padding: 22px; max-width: 340px; width: 100%; }
+  .dlg .t { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .dlg .c { font-size: 14px; color: #5C544A; line-height: 1.7; }
+  .dlg .b { margin-top: 18px; }
+
+  .empty { text-align: center; padding: 40px 20px; color: var(--sub); font-size: 13.5px; }
+  .empty .e { font-size: 34px; margin-bottom: 10px; }
+  .foot { text-align: center; padding: 8px 0 4px; font-size: 11.5px; color: #A8A29A; line-height: 1.8; }
+  .foot .lk { color: var(--green); cursor: pointer; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="topbar" id="topbar"></div>
+  <div id="view"></div>
+</div>
+<div class="tabbar" id="tabbar"></div>
+<div id="toast"></div>
+<div id="mask"><div class="dlg" id="dlgBody"></div></div>
+
+<!-- ══ 核心逻辑：以下两段与 miniprogram/utils/ 下的源文件逐字节一致，由 tools/check_web_drift.js 校验 ══ -->
+<script>var module = { exports: {} };</script>
+<script id="core-theory">
+// 三个理论：2026 下半年真实爆火的青年生活潮流（抖音热榜 / 半月谈 / 官媒解读）
+// 本质是「极简养生 + 反消费主义（消费祛魅）」。本产品把它们当成消费决策的体检维度。
+// 每个理论对应一类消费陷阱，自检题、报告诊断都挂在它下面。
+
+const THEORIES = [
+  {
+    key: 'water',
+    name: '大水理论',
+    en: 'FLOOD',
+    trap: '糖水陷阱',
+    hook: '弱者喝饮料，强者喝大水',
+    real: '放下奶茶咖啡含糖饮料，换 1.5–2L 大瓶白水。低成本、无社交包袱、完全自主掌控。',
+    map: '映射到消费：这笔是不是「糖水」——为面子、身份、溢价买单，而不是真需要？换成平价替代能不能解决？',
+    questions: [
+      {
+        q: '今天为什么突然想买它？',
+        opts: [
+          { t: '早就需要，刚好看到', v: 20 },
+          { t: '有优惠 / 打折，觉得划算', v: 55 },
+          { t: '刷到了 / 别人有，突然想要', v: 90 }
+        ]
+      },
+      {
+        q: '如果不买，会损失什么？',
+        opts: [
+          { t: '确实会不方便', v: 20 },
+          { t: '只是错过一个便宜', v: 55 },
+          { t: '其实也没什么', v: 85 }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'muscle',
+    name: '薄肌理论',
+    en: 'THIN MUSCLE',
+    trap: '负重陷阱',
+    hook: '穿衣显瘦，脱衣有肉',
+    real: '拒绝大块头大重量压迫，追求低体脂、线条干净，不为健身人设砸钱。',
+    map: '映射到消费：这东西会不会给你加无谓的「重量」？买了会不会积灰、为焦虑或人设买单？',
+    questions: [
+      {
+        q: '家里 / 身边有同类东西吗？',
+        opts: [
+          { t: '完全没有', v: 20 },
+          { t: '有，但不太一样', v: 55 },
+          { t: '有一个差不多的', v: 90 }
+        ]
+      },
+      {
+        q: '买回来大概率会？',
+        opts: [
+          { t: '每天都会用', v: 20 },
+          { t: '偶尔用用', v: 55 },
+          { t: '可能吃灰', v: 90 }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'sleep',
+    name: '大睡理论',
+    en: 'SLEEP ON IT',
+    trap: '冲动陷阱',
+    hook: '今晚先大睡，明早再说',
+    real: '十点睡、睡够八小时、拒绝报复性熬夜。断电重启。',
+    map: '映射到消费：一上头就买，睡一觉往往就不想要了。今晚先睡，明早还想要吗？',
+    questions: [
+      {
+        q: '如果必须等明天才能下单？',
+        opts: [
+          { t: '还是会买', v: 20 },
+          { t: '说不好', v: 55 },
+          { t: '大概就不买了', v: 90 }
+        ]
+      },
+      {
+        q: '你现在的状态是？',
+        opts: [
+          { t: '平静、理性', v: 20 },
+          { t: '有点累或烦', v: 55 },
+          { t: '很累 / 很气 / 很委屈', v: 90 }
+        ]
+      }
+    ]
+  }
+]
+
+const TRAP_LINE = {
+  water: '当心「糖水」：这笔更像为面子或溢价买单，而不是真缺它。先想想两块钱的大水能不能替代。',
+  muscle: '当心「负重」：这东西大概率会给你的人生加无谓的重量。买之前先问，家里那个差不多的怎么办。',
+  sleep: '当心「冲动」：现在的购买欲很怕睡觉。今晚先大睡，明早醒来还想要，那才是真想要。'
+}
+
+// 结论三档：不做五五开和稀泥
+function verdict(traps, scores) {
+  const maxScore = Math.max(scores.water || 0, scores.muscle || 0, scores.sleep || 0)
+  if (maxScore >= 80 || traps >= 2) {
+    return {
+      type: 'wait',
+      badge: '先别买',
+      sub: 'HOLD',
+      color: '#1F4A3F',
+      line: '体检下来不止一处亮红灯。花的不是这几百块，是下次还会这么花的习惯。先放着。'
+    }
+  }
+  if (traps >= 1) {
+    return {
+      type: 'sleep',
+      badge: '再大睡一晚',
+      sub: 'SLEEP ON IT',
+      color: '#8A6B1F',
+      line: '有一处要留意，但还没到「绝对别买」。今晚先大睡，明早那个想法若是你的，再下单也不迟。'
+    }
+  }
+  return {
+    type: 'buy',
+    badge: '可以买',
+    sub: 'GO AHEAD',
+    color: '#C2552F',
+    line: '三关都干净，这笔是真需求，不是被推着走的。买完别回头反复看价格，那样反而亏了体验。'
+  }
+}
+
+// 有效选项下标：必须是 0..n-1 的整数。
+// NaN / undefined / 字符串 / 越界全部算无效——这类脏值只能拒收，不能兜底成中间分，
+// 否则会凭空造出一个「可以买」的结论（比报错更危险）。
+function isValidPick(v, optLen) {
+  return typeof v === 'number' && isFinite(v) && Math.floor(v) === v && v >= 0 && v < optLen
+}
+
+// 输入 answers：{ water:[0,1], muscle:[0,2], sleep:[1,0] }（每项是该题选中的 opt 下标）
+// 输出 { scores, traps, verdict, lines }
+// 任一题答案无效直接抛错（err.code = 'BAD_ANSWER'），绝不出假报告。
+function scoreAnswers(answers) {
+  const scores = {}
+  const lines = []
+  let traps = 0
+  for (let i = 0; i < THEORIES.length; i++) {
+    const t = THEORIES[i]
+    const picked = (answers && answers[t.key]) || []
+    let sum = 0
+    for (let j = 0; j < t.questions.length; j++) {
+      const opts = t.questions[j].opts
+      const idx = picked[j]
+      if (!isValidPick(idx, opts.length)) {
+        const err = new Error(t.name + ' 第 ' + (j + 1) + ' 题答案无效，请重新答一遍')
+        err.code = 'BAD_ANSWER'
+        throw err
+      }
+      sum += opts[idx].v
+    }
+    const sc = Math.round(sum / t.questions.length)
+    scores[t.key] = sc
+    const hit = sc >= 60
+    if (hit) traps++
+    lines.push({ key: t.key, name: t.name, trap: t.trap, score: sc, hit: hit, line: hit ? TRAP_LINE[t.key] : '' })
+  }
+  const v = verdict(traps, scores)
+  return { scores: scores, traps: traps, verdict: v, lines: lines }
+}
+
+// 省钱换算：把「没买省下的钱」换算成大水 / 奶茶，呼应理论的叙事
+function savingText(price) {
+  const p = Number(price) || 0
+  const bottles = Math.max(0, Math.round(p / 2)) // 2 元 / 瓶 2L 大水
+  const milk = Math.max(0, Math.round(p / 20)) // 20 元 / 杯奶茶
+  if (!p) return ''
+  return '≈ 够买 ' + bottles + ' 瓶 2L 大水，或少喝 ' + milk + ' 杯奶茶'
+}
+
+function theoryByKey(key) {
+  for (let i = 0; i < THEORIES.length; i++) {
+    if (THEORIES[i].key === key) return THEORIES[i]
+  }
+  return null
+}
+
+module.exports = { THEORIES, TRAP_LINE, verdict, scoreAnswers, isValidPick, savingText, theoryByKey }
+</script>
+<script>var theory = module.exports; var module = { exports: {} };</script>
+<script id="core-util">
+function pad(n) {
+  return n < 10 ? '0' + n : '' + n
+}
+
+// 相对时间：刚刚 / 12 分钟前 / 3 小时前 / 昨天 / 10月16日
+function ago(ts) {
+  const d = Date.now() - ts
+  if (d < 60 * 1000) return '刚刚'
+  if (d < 3600 * 1000) return Math.floor(d / 60000) + ' 分钟前'
+  if (d < 24 * 3600 * 1000) return Math.floor(d / 3600000) + ' 小时前'
+  if (d < 48 * 3600 * 1000) return '昨天'
+  const t = new Date(ts)
+  return t.getMonth() + 1 + '月' + t.getDate() + '日'
+}
+
+// 倒计时文案：剩余 02:41 / 剩余 23 小时 12 分
+function countdown(ms) {
+  if (ms <= 0) return '已到期'
+  const total = Math.floor(ms / 1000)
+  if (total < 3600) return pad(Math.floor(total / 60)) + ':' + pad(total % 60)
+  const h = Math.floor(total / 3600)
+  const m = Math.floor((total % 3600) / 60)
+  return h + ' 小时 ' + m + ' 分'
+}
+
+// 金额换算：让人对"这笔钱"有实感，而不是只有一个数字
+function convert(price) {
+  const p = Number(price)
+  if (!p || p <= 0) return ''
+  if (p < 60) return '≈ ' + Math.max(1, Math.round(p / 9.9)) + ' 杯咖啡'
+  if (p < 300) return '≈ ' + Math.round(p / 25) + ' 顿工作日午饭'
+  if (p < 2000) return '≈ ' + Math.round(p / 100) + ' 天房租'
+  if (p < 20000) return '≈ ' + Math.round(p / 3000) + ' 个月房租'
+  return '≈ ' + Math.round(p / 5000) + ' 台新手机'
+}
+
+// 金额显示：689 / 12,800
+function money(n) {
+  const v = Math.round(Number(n) || 0)
+  const s = String(v)
+  if (s.length <= 3) return s
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+// 稳定的伪随机：同一条 id 永远得到同一个比率，避免刷新一次结论就变
+function hash(str) {
+  let h = 2166136261
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return Math.abs(h)
+}
+
+function pct(a, b) {
+  const t = a + b
+  if (!t) return 0
+  return Math.round((a / t) * 100)
+}
+
+// 今天的日期键，用来做"每天 3 笔"的计数
+function dayKey() {
+  const d = new Date()
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())
+}
+
+module.exports = { ago, countdown, convert, money, hash, pct, dayKey, pad }
+</script>
+<script>var util = module.exports; var module = null;</script>
+<!-- ══ 核心逻辑结束 ══ -->
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   睡一觉再买 · 网页版
+   数据层：localStorage（不联网，数据不出本机）
+   ══════════════════════════════════════════════════════════════ */
+var K_APPS = 'wsleep_apps_v1'
+var K_RATE = 'wsleep_rate_v1'
+var MIN_IMPULSE_LEN = 6
+var COOLDOWN_MS = 24 * 3600 * 1000 // 真实产品行为：一晚
+
+/* ── 小工具 ────────────────────────────────────────────── */
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  })
+}
+function toast(msg) {
+  var el = document.getElementById('toast')
+  el.textContent = msg
+  el.classList.add('on')
+  clearTimeout(el._t)
+  el._t = setTimeout(function () { el.classList.remove('on') }, 2200)
+}
+function dialog(title, content, btnText) {
+  var body = document.getElementById('dlgBody')
+  body.innerHTML =
+    '<div class="t">' + esc(title) + '</div>' +
+    '<div class="c">' + esc(content) + '</div>' +
+    '<div class="b"><button class="btn" data-act="closeDialog">' + esc(btnText || '好') + '</button></div>'
+  document.getElementById('mask').classList.add('on')
+}
+function closeDialog() { document.getElementById('mask').classList.remove('on') }
+
+// 工时换算：把价格换成「你的时间」——比任何物价锚点都更有杀伤力
+function workText(price, rate) {
+  var p = Number(price), r = Number(rate)
+  if (!p || p <= 0 || !r || r <= 0) return ''
+  var h = p / r
+  if (h < 8) return '≈ 你 ' + (Math.round(h * 10) / 10) + ' 小时的班'
+  var d = h / 8
+  if (d < 22) return '≈ 你 ' + (Math.round(d * 10) / 10) + ' 个工作日的班'
+  return '≈ 你 ' + (Math.round(d / 21.75 * 10) / 10) + ' 个月的班'
+}
+
+/* ── 数据层（接口与小程序 local.js 一致，全部返回 Promise，绝不同步抛错） ── */
+function raw() {
+  try { return JSON.parse(localStorage.getItem(K_APPS)) || [] } catch (e) { return [] }
+}
+function persist(list) {
+  try { localStorage.setItem(K_APPS, JSON.stringify(list)) } catch (e) { toast('存不下去了，浏览器存储满了') }
+}
+function getRate() {
+  try { return Number(localStorage.getItem(K_RATE)) || 0 } catch (e) { return 0 }
+}
+function setRate(v) {
+  try { localStorage.setItem(K_RATE, String(v)) } catch (e) {}
+}
+
+var DECISION_TEXT = { pending: '待决定', drop: '没买 · 省下了', buy: '还是买了', sleep: '大睡中' }
+
+function decorate(e) {
+  var saved = e.decision === 'drop' ? e.price : 0
+  var left = 0
+  if (e.decision === 'sleep' && e.cooldownUntil) left = Math.max(0, e.cooldownUntil - Date.now())
+  return {
+    _id: e._id, title: e.title, price: e.price, priceText: util.money(e.price),
+    impulse: e.impulse || '', ts: e.ts, agoText: util.ago(e.ts),
+    answers: e.answers || null, scores: e.scores || null, traps: e.traps || 0,
+    verdictType: e.verdictType || '', decision: e.decision || 'pending',
+    decisionText: DECISION_TEXT[e.decision || 'pending'],
+    saved: saved, savedText: util.money(saved), savingText: theory.savingText(saved),
+    cooldownLeft: left, cooldownLeftText: left > 0 ? util.countdown(left) : '', isMine: !!e.isMine
+  }
+}
+function guard(fn) {
+  return function () {
+    try { return fn.apply(this, arguments) } catch (e) { return Promise.reject(e) }
+  }
+}
+// 取出记录时必须连数组一起拿：改完 persist(list) 用同一个数组落盘。
+// 写成 persist(raw()) 会重新解析一遍 storage，把刚改的对象丢掉（2026-10-22 踩过）。
+var find = function (id) {
+  var list = raw()
+  for (var i = 0; i < list.length; i++) if (list[i]._id === id) return { list: list, item: list[i] }
+  return null
+}
+var update = function (id, fn) {
+  var hit = find(id)
+  if (!hit) return null
+  fn(hit.item)
+  persist(hit.list)
+  return hit.item
+}
+var MISSING = function () { return Promise.reject(new Error('记录不存在')) }
+var store = {
+  create: guard(function (p) {
+    if (!p.title || String(p.title).trim().length < 2) return Promise.reject(new Error('商品名太短'))
+    if (!(Number(p.price) > 0)) return Promise.reject(new Error('价格不对'))
+    if (!p.impulse || p.impulse.trim().length < MIN_IMPULSE_LEN)
+      return Promise.reject(new Error('一句话冲动至少 ' + MIN_IMPULSE_LEN + ' 个字'))
+    var list = raw()
+    var e = {
+      _id: 'w_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      title: p.title.trim(), price: Number(p.price), impulse: p.impulse.trim(), ts: Date.now(),
+      answers: null, scores: null, traps: 0, verdictType: '', decision: 'pending',
+      decidedTs: 0, cooldownUntil: 0, isMine: true
+    }
+    list.unshift(e)
+    persist(list)
+    return Promise.resolve({ ok: true, id: e._id })
+  }),
+  get: guard(function (id) {
+    var hit = find(id)
+    return hit ? Promise.resolve(decorate(hit.item)) : MISSING()
+  }),
+  saveAnswers: guard(function (id, answers) {
+    var e = update(id, function (it) { it.answers = answers })
+    return e ? Promise.resolve({ ok: true }) : MISSING()
+  }),
+  saveCheck: guard(function (id, answers) {
+    var r = theory.scoreAnswers(answers) // 脏答案在这里抛 BAD_ANSWER，绝不落库
+    var e = update(id, function (it) {
+      it.answers = answers
+      it.scores = r.scores
+      it.traps = r.traps
+      it.verdictType = r.verdict.type
+    })
+    return e ? Promise.resolve(decorate(e)) : MISSING()
+  }),
+  decide: guard(function (id, decision) {
+    var e = update(id, function (it) {
+      it.decision = decision
+      it.decidedTs = Date.now()
+      it.cooldownUntil = decision === 'sleep' ? Date.now() + COOLDOWN_MS : 0
+    })
+    return e ? Promise.resolve(decorate(e)) : MISSING()
+  }),
+  // 演示用：把冷静期直接设为已到期
+  wakeUp: guard(function (id) {
+    var e = update(id, function (it) { it.cooldownUntil = Date.now() - 1 })
+    return e ? Promise.resolve(decorate(e)) : MISSING()
+  }),
+  remove: guard(function (id) {
+    var list = raw()
+    var next = list.filter(function (e) { return e._id !== id })
+    persist(next)
+    return Promise.resolve({ ok: true })
+  }),
+  myApps: guard(function () {
+    return Promise.resolve(raw().map(decorate))
+  }),
+  stats: guard(function () {
+    var apps = raw().map(decorate)
+    var dropCount = 0, saved = 0, checked = 0, pending = 0
+    for (var i = 0; i < apps.length; i++) {
+      if (apps[i].decision === 'drop') { dropCount++; saved += apps[i].price }
+      if (apps[i].scores) checked++
+      if (apps[i].decision === 'sleep' && apps[i].cooldownLeft === 0) pending++
+    }
+    return Promise.resolve({
+      total: apps.length, dropCount: dropCount, saved: saved,
+      savedText: util.money(saved), savingText: theory.savingText(saved),
+      checked: checked, pending: pending
+    })
+  })
+}
+
+// 第一道没答的题的全局序号（0..5）；全部答完返回 -1。
+// 断点续答的唯一依据：答一半关掉页面，重进要能接着问，不算分、不出结论。
+function firstUnanswered(answers) {
+  var k = 0
+  for (var i = 0; i < theory.THEORIES.length; i++) {
+    var arr = (answers && answers[theory.THEORIES[i].key]) || []
+    for (var j = 0; j < theory.THEORIES[i].questions.length; j++) {
+      if (!theory.isValidPick(arr[j], theory.THEORIES[i].questions[j].opts.length)) return k
+      k++
+    }
+  }
+  return -1
+}
+
+/* ── 三轴雷达（SVG，零依赖手绘）───────────────────────────── */
+function radarSVG(scores, size) {
+  var S = size || 260, cx = S / 2, cy = S / 2 + 6, R = S / 2 - 46
+  var keys = ['water', 'muscle', 'sleep']
+  var labels = ['大水', '薄肌', '大睡']
+  function pt(i, ratio) {
+    var a = (-90 + i * 120) * Math.PI / 180
+    return [cx + Math.cos(a) * R * ratio, cy + Math.sin(a) * R * ratio]
+  }
+  var g = ''
+  // 网格：3 层
+  for (var L = 1; L <= 3; L++) {
+    var p = []
+    for (var i = 0; i < 3; i++) { var q = pt(i, L / 3); p.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)) }
+    g += '<polygon points="' + p.join(' ') + '" fill="none" stroke="#E5DFD3" stroke-width="1"/>'
+  }
+  // 60 分警戒圈（虚线）：过线即判定「中招」
+  var wp = []
+  for (var i2 = 0; i2 < 3; i2++) { var q2 = pt(i2, 0.6); wp.push(q2[0].toFixed(1) + ',' + q2[1].toFixed(1)) }
+  g += '<polygon points="' + wp.join(' ') + '" fill="none" stroke="#C2552F" stroke-width="1" stroke-dasharray="3 3" opacity=".55"/>'
+  // 轴线 + 标签
+  for (var i3 = 0; i3 < 3; i3++) {
+    var e3 = pt(i3, 1)
+    g += '<line x1="' + cx + '" y1="' + cy + '" x2="' + e3[0].toFixed(1) + '" y2="' + e3[1].toFixed(1) + '" stroke="#E5DFD3" stroke-width="1"/>'
+    var lp = pt(i3, 1.22)
+    var anchor = i3 === 0 ? 'middle' : (i3 === 1 ? 'start' : 'end')
+    g += '<text x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + 4).toFixed(1) + '" text-anchor="' + anchor + '" font-size="12" font-weight="600" fill="#7A756E">' + labels[i3] + '</text>'
+    g += '<text x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + 19).toFixed(1) + '" text-anchor="' + anchor + '" font-size="12" font-weight="700" fill="#1F1D1A">' + (scores[keys[i3]] || 0) + '</text>'
+  }
+  // 数据面
+  var dp = []
+  for (var i4 = 0; i4 < 3; i4++) {
+    var s = Math.max(0, Math.min(100, scores[keys[i4]] || 0))
+    var q4 = pt(i4, s / 100)
+    dp.push(q4[0].toFixed(1) + ',' + q4[1].toFixed(1))
+  }
+  var hitAny = (scores.water >= 60 || scores.muscle >= 60 || scores.sleep >= 60)
+  g += '<polygon points="' + dp.join(' ') + '" fill="' + (hitAny ? '#C2552F' : '#1F4A3F') + '" fill-opacity=".16" stroke="' + (hitAny ? '#C2552F' : '#1F4A3F') + '" stroke-width="2" stroke-linejoin="round"/>'
+  for (var i5 = 0; i5 < 3; i5++) {
+    var s5 = Math.max(0, Math.min(100, scores[keys[i5]] || 0))
+    var q5 = pt(i5, s5 / 100)
+    g += '<circle cx="' + q5[0].toFixed(1) + '" cy="' + q5[1].toFixed(1) + '" r="3.5" fill="' + (hitAny ? '#C2552F' : '#1F4A3F') + '"/>'
+  }
+  return '<svg viewBox="0 0 ' + S + ' ' + S + '" width="100%" style="display:block">' + g + '</svg>'
+}
+
+/* ── 视图状态 ──────────────────────────────────────────── */
+var S = { view: 'home', id: '', qi: 0, entry: null, draft: {}, stack: [] }
+var timer = null
+function stopTimer() { if (timer) { clearInterval(timer); timer = null } }
+
+function go(view, id) {
+  stopTimer()
+  if (S.view !== view) S.stack.push(S.view)
+  S.view = view
+  if (id) S.id = id
+  render()
+  window.scrollTo(0, 0)
+}
+function back() {
+  stopTimer()
+  var prev = S.stack.pop() || 'home'
+  S.view = prev
+  render()
+}
+
+/* ── 顶栏 / tabbar ─────────────────────────────────────── */
+var TITLES = { home: '睡一觉再买', submit: '记一笔冲动', check: '三理论自检', report: '冲动体检报告', mine: '我的冷静档案', theory: '三个理论' }
+function renderChrome() {
+  var v = S.view
+  var isTab = (v === 'home' || v === 'mine')
+  var showBack = !isTab && S.stack.length > 0
+  document.getElementById('topbar').innerHTML =
+    (showBack ? '<button class="back" data-act="back">‹ 返回</button>' : '<span class="sp"></span>') +
+    '<div class="tt">' + esc(TITLES[v] || '') + '</div>' +
+    (isTab ? '<span class="sp"></span>' : '<button class="home" data-act="goHome">首页</button>')
+  document.getElementById('tabbar').innerHTML =
+    '<button class="' + (v === 'home' ? 'on' : '') + '" data-act="goHome"><span class="ico">◍</span>钱包</button>' +
+    '<button class="' + (v === 'mine' ? 'on' : '') + '" data-act="goMine"><span class="ico">☰</span>我的</button>'
+}
+
+/* ── 各视图 ────────────────────────────────────────────── */
+function viewHome(st) {
+  var h = ''
+  h += '<div class="hero">' +
+    '<div class="brand">SLEEP ON IT</div>' +
+    '<div class="name">睡一觉再买</div>' +
+    '<div class="slogan">下单前，先过一遍薄肌 · 大水 · 大睡。<br>不是记账，是给「想买」插一次认真的盘问。</div>' +
+    '</div>'
+
+  if (st.total > 0) {
+    h += '<div class="stats">' +
+      '<div class="statbox"><div class="n">' + st.total + '</div><div class="l">记过</div></div>' +
+      '<div class="statbox"><div class="n">' + st.dropCount + '</div><div class="l">没买</div></div>' +
+      '<div class="statbox big"><div class="n">¥' + st.savedText + '</div><div class="l">省下</div></div>' +
+      '</div>'
+    if (st.saved > 0) h += '<div class="tiny" style="text-align:center;margin:10px 0 16px">' + esc(st.savingText) + '</div>'
+    else h += '<div style="height:16px"></div>'
+  }
+
+  return h +
+    '<button class="btn" data-act="goSubmit" style="margin-bottom:10px">今天又想买了？</button>' +
+    '<div class="tiny" style="text-align:center;margin-bottom:18px">六道小题，大概 40 秒。数据只存在你这台设备上。</div>' +
+    '<div id="todoBox"></div>' +
+    '<div class="hr"></div>' +
+    '<div class="row between" style="margin-bottom:10px"><div class="h2" style="margin:0">三个理论是什么</div><span class="lk-chip"><span class="tiny" data-act="goTheory" style="cursor:pointer;color:var(--green);font-weight:600">详细 ›</span></span></div>' +
+    theory.THEORIES.map(function (t) {
+      return '<div class="tcard"><div><span class="nm">' + esc(t.name) + '</span><span class="en">' + esc(t.en) + '</span></div>' +
+        '<div class="hk">' + esc(t.hook) + '</div>' +
+        '<div class="ds">' + esc(t.map) + '</div></div>'
+    }).join('') +
+    '<div class="foot"><div>薄肌 · 大水 · 大睡 —— 2026 下半年真实流行的青年生活主张</div>' +
+    '<div style="margin-top:4px">本工具不联网、不上传、不记账，只做一件事：让你在下单前多想一分钟。</div></div>'
+}
+
+function renderTodos() {
+  var box = document.getElementById('todoBox')
+  if (!box) return
+  store.myApps().then(function (apps) {
+    var items = []
+    apps.forEach(function (a) {
+      if (a.decision === 'pending') {
+        items.push({ id: a._id, t: '「' + a.title + '」还没自检完', d: a.scores ? '体检做完了，还没决定' : '答到一半放下了，接着答完', act: 'openEntry' })
+      } else if (a.decision === 'sleep' && a.cooldownLeft === 0) {
+        items.push({ id: a._id, t: '睡醒了：「' + a.title + '」还想要吗？', d: '冷静期已过，去做最终决定', act: 'openEntry' })
+      }
+    })
+    if (!items.length) { box.innerHTML = ''; return }
+    box.innerHTML = '<div class="card todo">' + items.map(function (it) {
+      return '<div data-act="' + it.act + '" data-id="' + it.id + '" style="cursor:pointer;padding:6px 0">' +
+        '<div class="t">⏰ ' + esc(it.t) + '</div><div class="d">' + esc(it.d) + '</div></div>'
+    }).join('') + '</div>'
+  })
+}
+
+function viewSubmit() {
+  var d = S.draft
+  return '<div class="card">' +
+    '<div class="h2">先把它记下来</div>' +
+    '<div class="muted" style="margin-bottom:16px">越具体越好。写清楚「为什么想买」，后面体检才准。</div>' +
+    '<div class="field"><label>想买什么<span class="hint">至少 2 个字</span></label>' +
+    '<input id="fTitle" placeholder="例如：降噪耳机" value="' + esc(d.title || '') + '" maxlength="30"></div>' +
+    '<div class="field"><label>多少钱<span class="hint">¥ 人民币</span></label>' +
+    '<input id="fPrice" type="number" inputmode="decimal" placeholder="1699" value="' + esc(d.price || '') + '" min="1" max="100000">' +
+    '<div class="echo" id="echoPrice"></div></div>' +
+    '<div class="field"><label>一句话冲动<span class="hint">至少 6 个字，想到什么写什么</span></label>' +
+    '<textarea id="fImpulse" placeholder="例如：刷到了，觉得戴着好看" maxlength="60">' + esc(d.impulse || '') + '</textarea>' +
+    '<div class="counter"><span id="cImpulse">0</span> / 60</div></div>' +
+    '<div class="hr"></div>' +
+    '<div class="field" style="margin-bottom:0"><label>你的时薪<span class="hint">选填 · 只存本机，用来把价格换成工时</span></label>' +
+    '<input id="fRate" type="number" inputmode="decimal" placeholder="60" value="' + (getRate() || '') + '" min="1" max="100000">' +
+    '<div class="echo" id="echoRate"></div></div>' +
+    '</div>' +
+    '<button class="btn" data-act="doSubmit">下一步 · 开始自检</button>' +
+    '<button class="btn ghost" data-act="goHome" style="margin-top:10px">算了，先不记</button>'
+}
+
+function bindSubmit() {
+  var t = document.getElementById('fTitle'), p = document.getElementById('fPrice')
+  var im = document.getElementById('fImpulse'), rt = document.getElementById('fRate')
+  function echo() {
+    S.draft = { title: t.value, price: p.value, impulse: im.value }
+    document.getElementById('echoPrice').textContent =
+      (Number(p.value) > 0 ? util.convert(p.value) : '') ||
+      (Number(p.value) > 0 ? '' : '')
+    var w = workText(p.value, rt.value)
+    document.getElementById('echoRate').textContent = w ? w + '（¥' + util.money(p.value) + '）' : ''
+    document.getElementById('cImpulse').textContent = im.value.length
+  }
+  ;[t, p, im, rt].forEach(function (el) { if (el) el.addEventListener('input', echo) })
+  echo()
+}
+
+function viewCheck(entry) {
+  var totalQ = theory.THEORIES.length * 2
+  var k = S.qi
+  var t = theory.THEORIES[Math.floor(k / 2)]
+  var qi = k % 2
+  var q = t.questions[qi]
+  var ans = (entry.answers && entry.answers[t.key]) || []
+  var picked = ans[qi]
+  var h = ''
+  h += '<div class="tiny" style="text-align:right;margin-bottom:6px">第 ' + (k + 1) + ' / ' + totalQ + ' 题</div>' +
+    '<div class="progbar"><i style="width:' + Math.round((k / totalQ) * 100) + '%"></i></div>' +
+    '<div class="qwrap">' +
+    '<div class="qtheory">' + esc(t.name) + ' · ' + esc(t.en) + '</div>' +
+    '<div class="qtext">' + esc(q.q) + '</div>' +
+    q.opts.map(function (o, i) {
+      return '<button class="opt' + (picked === i ? ' on' : '') + '" data-act="pick" data-i="' + i + '">' + esc(o.t) + '</button>'
+    }).join('') +
+    '<div class="qnav">' +
+    (k > 0 ? '<button data-act="prevQ">‹ 上一题</button>' : '<span></span>') +
+    '<span class="tiny">' + esc(entry.title) + ' · ¥' + esc(entry.priceText) + '</span>' +
+    '</div></div>'
+  return h
+}
+
+function viewReport(a) {
+  if (!a.scores) {
+    return '<div class="empty"><div class="e">◔</div>这份还没自检完。<br>先答完六道题。</div>' +
+      '<button class="btn" data-act="goCheck">去自检</button>'
+  }
+  var v = theory.verdict(a.traps || 0, a.scores || {})
+  var rate = getRate()
+  var wk = workText(a.price, rate)
+  var h = ''
+
+  h += '<div class="verdict" style="background:' + v.color + '">' +
+    '<div class="badge">' + esc(v.badge) + '</div>' +
+    '<div class="sub">' + esc(v.sub) + '</div>' +
+    '<div class="ln">' + esc(v.line) + '</div>' +
+    '</div>'
+
+  // 自证：用他自己填的那句话，反过来对质
+  h += '<div class="quote">' +
+    '<div class="lb">你刚才说的是</div>' +
+    '<div class="txt">「' + esc(a.impulse) + '」</div>' +
+    '<div class="meta">' + esc(a.title) + ' · ¥' + esc(a.priceText) +
+    (util.convert(a.price) ? ' · ' + esc(util.convert(a.price)) : '') +
+    (wk ? ' · ' + esc(wk) : '') + '</div>' +
+    '</div>'
+
+  // 三轴
+  h += '<div class="card">' +
+    '<div class="row between" style="margin-bottom:6px"><div class="h2" style="margin:0">三轴体检</div><div class="tiny">过虚线即中招</div></div>' +
+    '<div style="max-width:290px;margin:6px auto 0">' + radarSVG(a.scores, 260) + '</div>' +
+    '<div style="margin-top:10px">' +
+    theory.THEORIES.map(function (t) {
+      var sc = a.scores[t.key] || 0
+      var col = sc >= 80 ? '#C2552F' : (sc >= 60 ? '#8A6B1F' : '#1F4A3F')
+      return '<div class="axis"><div class="nm">' + esc(t.name) + '</div>' +
+        '<div class="bar"><i style="width:' + sc + '%;background:' + col + '"></i><span class="warn"></span></div>' +
+        '<div class="sc" style="color:' + col + '">' + sc + '</div></div>'
+    }).join('') +
+    '</div>' +
+    (a.traps > 0
+      ? '<div style="margin-top:6px">' + theory.THEORIES.filter(function (t) { return (a.scores[t.key] || 0) >= 60 }).map(function (t) {
+          return '<div class="diag"><div class="nm">' + esc(t.name) + ' · 中「' + esc(t.trap) + '」</div><div class="tx">' + esc(theory.TRAP_LINE[t.key]) + '</div></div>'
+        }).join('') + '</div>'
+      : '<div class="diag" style="border-left-color:var(--green);background:#F4F8F5"><div class="nm" style="color:var(--green)">三关全过</div><div class="tx">没有一处踩到糖水、负重、冲动。这笔钱花得不冤。</div></div>') +
+    '</div>'
+
+  if (a.decision === 'pending') {
+    h += '<div class="card"><div class="h2">所以，买不买？</div>' +
+      '<div class="muted" style="margin-bottom:4px">三个按钮，选完就记档。没人能替你决定，但至少这次是你自己想过的。</div>' +
+      '<div class="decide">' +
+      '<button class="btn ghost" data-act="doDecide" data-d="drop">先别买</button>' +
+      '<button class="btn soft" data-act="doDecide" data-d="sleep">睡一晚</button>' +
+      '<button class="btn" data-act="doDecide" data-d="buy" style="background:var(--rust)">还是买</button>' +
+      '</div></div>'
+  } else {
+    var label = { drop: '你没买', buy: '你还是买了', sleep: '你选择了先睡一晚' }[a.decision]
+    h += '<div class="card"><div class="h2">' + esc(label) + ' · ' + esc(a.decisionText) + '</div>'
+    if (a.decision === 'drop') {
+      h += '<div style="font-size:26px;font-weight:800;color:var(--green);letter-spacing:-.5px">省下 ¥' + esc(a.savedText) + '</div>' +
+        '<div class="muted" style="margin-top:4px">' + esc(a.savingText) + (wk ? '，也等于 ' + esc(wk) : '') + '。别让它今晚又漏到别的地方去。</div>'
+    } else if (a.decision === 'buy') {
+      h += '<div class="muted">没人能替你决定。记住今天这个选择——一个月后如果后悔，回来看看这份体检。</div>'
+    } else {
+      h += '<div class="cool"><div class="tiny">' + (a.cooldownLeft > 0 ? '冷静期还剩' : '冷静期已结束') + '</div>' +
+        '<div class="cd" id="cdNum">' + (a.cooldownLeft > 0 ? esc(a.cooldownLeftText) : '睡醒了') + '</div>' +
+        '<div class="tiny" style="margin-top:4px">' + (a.cooldownLeft > 0 ? '明早醒来还想要，那才是真想要' : '现在再问自己一次：还想要吗？') + '</div>' +
+        (a.cooldownLeft > 0
+          ? '<button class="btn sm soft" data-act="wakeUp" style="margin:14px auto 0">⏩ 模拟睡醒（演示用）</button>'
+          : '<button class="btn sm" data-act="reDecide" style="margin:14px auto 0">现在决定</button>') +
+        '</div>'
+    }
+    h += '</div>'
+    h += '<button class="btn ghost" data-act="makeCard" style="margin-bottom:10px">生成体检卡片（可保存 / 转发）</button>'
+    h += '<button class="btn ghost" data-act="goHome">回钱包</button>'
+  }
+  return h
+}
+
+function viewMine(st, apps) {
+  var h = ''
+  h += '<div class="stats">' +
+    '<div class="statbox"><div class="n">' + st.total + '</div><div class="l">记过</div></div>' +
+    '<div class="statbox"><div class="n">' + st.dropCount + '</div><div class="l">没买</div></div>' +
+    '<div class="statbox big"><div class="n">¥' + st.savedText + '</div><div class="l">省下</div></div>' +
+    '</div>'
+  if (st.saved > 0) {
+    h += '<div class="card" style="margin-top:14px;background:#F4F8F5">' +
+      '<div class="tiny" style="color:var(--green);font-weight:600">累计省下</div>' +
+      '<div style="font-size:24px;font-weight:800;color:var(--green);letter-spacing:-.5px;margin-top:2px">¥' + esc(st.savedText) + '</div>' +
+      '<div class="muted" style="margin-top:4px">' + esc(st.savingText) + '</div></div>'
+  }
+
+  if (!apps.length) {
+    h += '<div class="empty"><div class="e">◍</div>还没记过任何一笔。<br>下次想买点什么，先来这里过一遍。</div>' +
+      '<button class="btn" data-act="goSubmit">记一笔冲动</button>'
+    return h
+  }
+
+  h += '<div class="hr"></div><div class="h2">全部记录</div>'
+  h += apps.map(function (a) {
+    var v = a.scores ? theory.verdict(a.traps || 0, a.scores) : null
+    var cls = v ? (v.type === 'wait' ? 'g' : (v.type === 'sleep' ? 'a' : 'r')) : ''
+    var pending = (a.decision === 'sleep' && a.cooldownLeft === 0) || a.decision === 'pending'
+    return '<div class="item" data-act="openEntry" data-id="' + a._id + '" style="cursor:pointer">' +
+      '<div class="row between"><div class="tt">' + esc(a.title) + '</div><div class="pr">¥' + esc(a.priceText) + '</div></div>' +
+      '<div class="im">「' + esc(a.impulse) + '」</div>' +
+      '<div class="ft">' +
+      '<div class="row gap8">' +
+      (v ? '<span class="chip ' + cls + '">' + esc(v.badge) + '</span>' : '<span class="chip">未自检</span>') +
+      '<span class="chip">' + esc(a.decisionText) + '</span>' +
+      (pending ? '<span class="chip a">待处理</span>' : '') +
+      '</div>' +
+      '<span class="tiny">' + esc(a.agoText) + (a.cooldownLeft > 0 ? ' · ' + esc(a.cooldownLeftText) : '') + '</span>' +
+      '</div></div>'
+  }).join('')
+  h += '<div class="foot" style="margin-top:18px"><span class="lk" data-act="clearAll">清空本机全部记录</span></div>'
+  return h
+}
+
+function viewTheory() {
+  return '<div class="muted" style="margin-bottom:14px">这三个说法是 2026 下半年真实流行起来的青年生活主张（抖音热榜、半月谈、官媒都解读过）。本质是「极简养生 + 消费祛魅」。本工具把它们当成三个体检维度。</div>' +
+    theory.THEORIES.map(function (t) {
+      return '<div class="card">' +
+        '<div class="row between"><div class="h2" style="margin:0">' + esc(t.name) + '</div><span class="tiny" style="letter-spacing:1.2px">' + esc(t.en) + '</span></div>' +
+        '<div style="font-size:15px;font-weight:600;color:var(--green);margin:8px 0">' + esc(t.hook) + '</div>' +
+        '<div class="muted" style="margin-bottom:10px">' + esc(t.real) + '</div>' +
+        '<div class="hr" style="margin:12px 0"></div>' +
+        '<div class="tiny" style="color:var(--sub);font-weight:600;margin-bottom:4px">怎么变成消费体检</div>' +
+        '<div class="muted" style="color:#5C544A">' + esc(t.map) + '</div>' +
+        '<div class="hr" style="margin:12px 0"></div>' +
+        '<div class="tiny" style="color:var(--sub);font-weight:600;margin-bottom:4px">对应的陷阱</div>' +
+        '<div><span class="chip a">中招线 60 分</span> <span style="font-size:13.5px;color:#5C544A">' + esc(t.trap) + '</span></div>' +
+        '</div>'
+    }).join('') +
+    '<div class="foot">分数不是科学测量，是一组公开、可解释的阈值规则：60 分过线记一处中招，两处以上或单轴 ≥80 直接判「先别买」。</div>'
+}
+
+/* ── 渲染 ──────────────────────────────────────────────── */
+function render() {
+  renderChrome()
+  var view = document.getElementById('view')
+  var v = S.view
+  if (v === 'home') {
+    store.stats().then(function (st) {
+      view.innerHTML = '<div class="view">' + viewHome(st) + '</div>'
+      renderTodos()
+    })
+  } else if (v === 'submit') {
+    view.innerHTML = '<div class="view">' + viewSubmit() + '</div>'
+    bindSubmit()
+  } else if (v === 'check') {
+    store.get(S.id).then(function (e) {
+      S.entry = e
+      view.innerHTML = '<div class="view">' + viewCheck(e) + '</div>'
+    }).catch(function () { toast('这条记录打不开了'); go('home') })
+  } else if (v === 'report') {
+    store.get(S.id).then(function (a) {
+      view.innerHTML = '<div class="view">' + viewReport(a) + '</div>'
+      if (a.decision === 'sleep' && a.cooldownLeft > 0) startCountdown()
+    }).catch(function () { toast('这条记录打不开了'); go('home') })
+  } else if (v === 'mine') {
+    store.myApps().then(function (apps) {
+      store.stats().then(function (st) {
+        view.innerHTML = '<div class="view">' + viewMine(st, apps) + '</div>'
+      })
+    })
+  } else if (v === 'theory') {
+    view.innerHTML = '<div class="view">' + viewTheory() + '</div>'
+  }
+}
+
+function startCountdown() {
+  stopTimer()
+  timer = setInterval(function () {
+    store.get(S.id).then(function (a) {
+      var el = document.getElementById('cdNum')
+      if (!el) { stopTimer(); return }
+      if (a.cooldownLeft > 0) {
+        el.textContent = a.cooldownLeftText
+      } else {
+        stopTimer()
+        render()
+      }
+    })
+  }, 1000)
+}
+
+/* ── 交互 ──────────────────────────────────────────────── */
+document.addEventListener('click', function (ev) {
+  var el = ev.target.closest('[data-act]')
+  if (!el) return
+  var act = el.getAttribute('data-act')
+  var id = el.getAttribute('data-id')
+
+  if (act === 'closeDialog') { closeDialog(); return }
+  if (act === 'goHome') { S.stack = []; go('home'); return }
+  if (act === 'goMine') { S.stack = []; go('mine'); return }
+  if (act === 'goSubmit') { go('submit'); return }
+  if (act === 'goTheory') { go('theory'); return }
+  if (act === 'back') { back(); return }
+
+  if (act === 'doSubmit') {
+    var t = document.getElementById('fTitle').value
+    var p = document.getElementById('fPrice').value
+    var im = document.getElementById('fImpulse').value
+    var rt = document.getElementById('fRate').value
+    if (rt) setRate(Number(rt) || 0)
+    store.create({ title: t, price: p, impulse: im }).then(function (r) {
+      S.draft = {}
+      S.qi = 0
+      S.id = r.id
+      go('check', r.id)
+    }).catch(function (e) { toast(e.message || '填得不对') })
+    return
+  }
+
+  if (act === 'pick') {
+    var i = Number(el.getAttribute('data-i'))
+    var k = S.qi
+    var t2 = theory.THEORIES[Math.floor(k / 2)]
+    var qi = k % 2
+    var answers = S.entry.answers || {}
+    if (!answers[t2.key]) answers[t2.key] = []
+    answers[t2.key][qi] = i
+    S.entry.answers = answers
+    // 每选一题立刻落盘：答一半关掉也能续答
+    store.saveAnswers(S.id, answers)
+    render()
+    var totalQ = theory.THEORIES.length * 2
+    setTimeout(function () {
+      if (k + 1 >= totalQ) {
+        store.saveCheck(S.id, answers).then(function () { go('report') }).catch(function (e) { toast(e.message) })
+      } else {
+        S.qi = k + 1
+        render()
+      }
+    }, 260)
+    return
+  }
+
+  if (act === 'prevQ') { if (S.qi > 0) { S.qi--; render() } return }
+
+  if (act === 'goCheck') {
+    // 续答：从第一道没答的题开始
+    store.get(S.id).then(function (e) {
+      var k = firstUnanswered(e.answers)
+      S.qi = k < 0 ? 0 : k
+      go('check')
+    })
+    return
+  }
+
+  if (act === 'openEntry') {
+    S.id = id
+    store.get(id).then(function (e) {
+      var k = firstUnanswered(e.answers)
+      if (k < 0) { go('report', id) } else { S.qi = k; go('check', id) }
+    })
+    return
+  }
+
+  if (act === 'doDecide') {
+    var d = el.getAttribute('data-d')
+    store.decide(S.id, d).then(function (a) {
+      if (d === 'drop') dialog('省下了 ¥' + a.savedText, a.savingText + '。别让它今晚又漏到别的地方去。', '好')
+      else if (d === 'buy') dialog('那就买', '没人能替你决定。记住今天这个选择，一个月后如果后悔，回来看看这份体检。', '记住了')
+      render()
+    }).catch(function (e) { toast(e.message) })
+    return
+  }
+
+  if (act === 'reDecide') {
+    store.decide(S.id, 'pending').then(function () { render() })
+    return
+  }
+
+  if (act === 'wakeUp') {
+    store.wakeUp(S.id).then(function () { render() })
+    return
+  }
+
+  if (act === 'clearAll') {
+    if (!window.confirm('清空本机全部记录？这一步不可撤销。')) return
+    localStorage.removeItem(K_APPS)
+    toast('已清空')
+    render()
+    return
+  }
+
+  if (act === 'makeCard') { makeCard(); return }
+})
+
+/* ── 体检卡片（Canvas 手绘 1080×1440，零依赖导出 PNG）───── */
+function makeCard() {
+  store.get(S.id).then(function (a) {
+    if (!a.scores) { toast('还没自检完'); return }
+    var v = theory.verdict(a.traps || 0, a.scores)
+    var W = 1080, H = 1440, c = document.createElement('canvas')
+    c.width = W; c.height = H
+    var g = c.getContext('2d')
+    var F = "'PingFang SC','Microsoft YaHei',sans-serif"
+
+    g.fillStyle = '#F2EFE7'; g.fillRect(0, 0, W, H)
+    g.fillStyle = '#FFFFFF'; roundRect(g, 60, 60, W - 120, H - 120, 32); g.fill()
+
+    g.fillStyle = '#7A756E'; g.font = '28px ' + F; g.textAlign = 'left'
+    g.fillText('SLEEP ON IT · 三理论体检', 108, 148)
+    g.fillStyle = '#1F1D1A'; g.font = 'bold 60px ' + F
+    g.fillText('睡一觉再买', 106, 224)
+
+    // 结论
+    g.fillStyle = v.color; roundRect(g, 108, 272, W - 216, 180, 24); g.fill()
+    g.fillStyle = '#fff'; g.font = 'bold 76px ' + F; g.textAlign = 'left'
+    g.fillText(v.badge, 148, 374)
+    g.font = '26px ' + F; g.globalAlpha = .85
+    g.fillText(v.sub, 150, 416)
+    g.globalAlpha = 1
+
+    // 商品 + 价格
+    g.fillStyle = '#1F1D1A'; g.font = 'bold 52px ' + F
+    g.fillText(clip(g, a.title, 30, W - 216), 108, 530)
+    g.fillStyle = '#7A756E'; g.font = '30px ' + F
+    var meta = '¥' + a.priceText + (util.convert(a.price) ? '  ' + util.convert(a.price) : '')
+    var wk = workText(a.price, getRate())
+    if (wk) meta += '   ' + wk
+    g.fillText(clip(g, meta, 40, W - 216), 108, 582)
+
+    // 那一句话
+    g.fillStyle = '#F0EDE5'; roundRect(g, 108, 616, W - 216, 150, 20); g.fill()
+    g.fillStyle = '#5C544A'; g.font = '32px ' + F
+    wrapText(g, '「' + a.impulse + '」', 148, 680, W - 296, 44)
+
+    // 雷达
+    drawRadar(g, a.scores, W / 2, 1062, 180)
+
+    // 底注：规则一句话 + 日期
+    g.fillStyle = '#A8A29A'; g.font = '24px ' + F; g.textAlign = 'left'
+    g.fillText('60 分过线记一处中招', 108, 1292)
+    g.textAlign = 'right'
+    var dt = new Date(a.ts)
+    g.fillText(dt.getFullYear() + '.' + util.pad(dt.getMonth() + 1) + '.' + util.pad(dt.getDate()), W - 108, 1292)
+
+    var url = c.toDataURL('image/png')
+    window.__lastCard = url // 给自动化校验留的观察点
+    var link = document.createElement('a')
+    link.href = url
+    link.download = '体检卡-' + a.title.replace(/[\\/:*?"<>|]/g, '') + '.png'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    toast('卡片已保存')
+  })
+}
+function roundRect(g, x, y, w, h, r) {
+  g.beginPath()
+  g.moveTo(x + r, y)
+  g.arcTo(x + w, y, x + w, y + h, r)
+  g.arcTo(x + w, y + h, x, y + h, r)
+  g.arcTo(x, y + h, x, y, r)
+  g.arcTo(x, y, x + w, y, r)
+  g.closePath()
+}
+function clip(g, s, max, maxW) {
+  var t = String(s || '')
+  if (t.length > max) t = t.slice(0, max) + '…'
+  while (max > 1 && g.measureText(t).width > maxW) { max--; t = String(s || '').slice(0, max) + '…' }
+  return t
+}
+function wrapText(g, text, x, y, maxW, lh) {
+  var line = ''
+  for (var i = 0; i < text.length; i++) {
+    var test = line + text[i]
+    if (g.measureText(test).width > maxW && line) { g.fillText(line, x, y); line = text[i]; y += lh }
+    else line = test
+  }
+  g.fillText(line, x, y)
+}
+function drawRadar(g, scores, cx, cy, R) {
+  var keys = ['water', 'muscle', 'sleep']
+  var labels = ['大水', '薄肌', '大睡']
+  var hitAny = scores.water >= 60 || scores.muscle >= 60 || scores.sleep >= 60
+  var main = hitAny ? '#C2552F' : '#1F4A3F'
+  function pt(i, ratio) {
+    var a = (-90 + i * 120) * Math.PI / 180
+    return [cx + Math.cos(a) * R * ratio, cy + Math.sin(a) * R * ratio]
+  }
+  g.lineWidth = 2
+  for (var L = 1; L <= 3; L++) {
+    g.beginPath()
+    for (var i = 0; i < 3; i++) { var p = pt(i, L / 3); i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]) }
+    g.closePath(); g.strokeStyle = '#E5DFD3'; g.stroke()
+  }
+  g.setLineDash([6, 6]); g.beginPath()
+  for (var i2 = 0; i2 < 3; i2++) { var q = pt(i2, 0.6); i2 ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1]) }
+  g.closePath(); g.strokeStyle = '#C2552F'; g.globalAlpha = .6; g.stroke(); g.globalAlpha = 1; g.setLineDash([])
+  g.beginPath()
+  for (var i3 = 0; i3 < 3; i3++) {
+    var s = Math.max(0, Math.min(100, scores[keys[i3]] || 0))
+    var d = pt(i3, s / 100)
+    i3 ? g.lineTo(d[0], d[1]) : g.moveTo(d[0], d[1])
+  }
+  g.closePath(); g.fillStyle = main; g.globalAlpha = .16; g.fill(); g.globalAlpha = 1
+  g.strokeStyle = main; g.lineWidth = 4; g.lineJoin = 'round'; g.stroke()
+  g.font = '32px ' + "'PingFang SC','Microsoft YaHei',sans-serif"
+  for (var i4 = 0; i4 < 3; i4++) {
+    var lp = pt(i4, 1.26)
+    g.textAlign = i4 === 0 ? 'center' : (i4 === 1 ? 'left' : 'right')
+    g.fillStyle = '#7A756E'; g.fillText(labels[i4], lp[0], lp[1])
+    g.fillStyle = '#1F1D1A'; g.font = 'bold 34px ' + "'PingFang SC','Microsoft YaHei',sans-serif"
+    g.fillText(String(scores[keys[i4]] || 0), lp[0], lp[1] + 42)
+    g.font = '32px ' + "'PingFang SC','Microsoft YaHei',sans-serif"
+  }
+}
+
+/* ── 启动 ──────────────────────────────────────────────── */
+render()
+</script>
+</body>
+</html>
